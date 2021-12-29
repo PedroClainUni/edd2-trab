@@ -2,9 +2,6 @@
 *.class
 out/
 
-# Intellij
-.idea/
-
 # Log file
 *.log
 
