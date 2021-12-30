@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class RBT<Key extends Comparable<Key>, Value> {
+public class BST<Key extends Comparable<Key>, Value> {
     private Node root;             // root of BST
     private PrintStream log = System.out;
     private int i = 0;
@@ -52,24 +52,18 @@ public class RBT<Key extends Comparable<Key>, Value> {
         private Value val;         // associated data
         private Node left, right;  // left and right subtrees
         private int size;          // number of nodes in subtree
-        private Color color;       // color of node
 
         public Node(Key key, Value val, int size) {
             this.key = key;
             this.val = val;
             this.size = size;
-            this.color = Color.RED;
         }
-    }
-
-    private enum Color {
-        RED, BLACK;
     }
 
     /**
      * Initializes an empty symbol table.
      */
-    public RBT() {
+    public BST() {
     }
 
     /**
@@ -138,25 +132,25 @@ public class RBT<Key extends Comparable<Key>, Value> {
      * @param  val the value
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
-//    public void put(Key key, Value val) {
-//        if (key == null) throw new IllegalArgumentException("calls put() with a null key");
-//        if (val == null) {
-//            delete(key);
-//            return;
-//        }
-//        root = put(root, key, val);
+    public void put(Key key, Value val) {
+        if (key == null) throw new IllegalArgumentException("calls put() with a null key");
+        if (val == null) {
+            delete(key);
+            return;
+        }
+        root = put(root, key, val);
 //        assert check();
-//    }
+    }
 
-//    private Node put(Node x, Key key, Value val) {
-//        if (x == null) return new Node(key, val, 1);
-//        int cmp = key.compareTo(x.key);
-//        if      (cmp < 0) x.left  = put(x.left,  key, val);
-//        else if (cmp > 0) x.right = put(x.right, key, val);
-//        else              x.val   = val;
-//        x.size = 1 + size(x.left) + size(x.right);
-//        return x;
-//    }
+    private Node put(Node x, Key key, Value val) {
+        if (x == null) return new Node(key, val, 1);
+        int cmp = key.compareTo(x.key);
+        if      (cmp < 0) x.left  = put(x.left,  key, val);
+        else if (cmp > 0) x.right = put(x.right, key, val);
+        else              x.val   = val;
+        x.size = 1 + size(x.left) + size(x.right);
+        return x;
+    }
 
 
     /**
@@ -202,29 +196,29 @@ public class RBT<Key extends Comparable<Key>, Value> {
      * @param  key the key
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
-//    public void delete(Key key) {
-//        if (key == null) throw new IllegalArgumentException("calls delete() with a null key");
-//        root = delete(root, key);
+    public void delete(Key key) {
+        if (key == null) throw new IllegalArgumentException("calls delete() with a null key");
+        root = delete(root, key);
 //        assert check();
-//    }
+    }
 
-//    private Node delete(Node x, Key key) {
-//        if (x == null) return null;
-//
-//        int cmp = key.compareTo(x.key);
-//        if      (cmp < 0) x.left  = delete(x.left,  key);
-//        else if (cmp > 0) x.right = delete(x.right, key);
-//        else {
-//            if (x.right == null) return x.left;
-//            if (x.left  == null) return x.right;
-//            Node t = x;
-//            x = min(t.right);
-//            x.right = deleteMin(t.right);
-//            x.left = t.left;
-//        }
-//        x.size = size(x.left) + size(x.right) + 1;
-//        return x;
-//    }
+    private Node delete(Node x, Key key) {
+        if (x == null) return null;
+
+        int cmp = key.compareTo(x.key);
+        if      (cmp < 0) x.left  = delete(x.left,  key);
+        else if (cmp > 0) x.right = delete(x.right, key);
+        else {
+            if (x.right == null) return x.left;
+            if (x.left  == null) return x.right;
+            Node t = x;
+            x = min(t.right);
+            x.right = deleteMin(t.right);
+            x.left = t.left;
+        }
+        x.size = size(x.left) + size(x.right) + 1;
+        return x;
+    }
 
 
     /**
@@ -540,8 +534,13 @@ public class RBT<Key extends Comparable<Key>, Value> {
      * ========================================================================
      */
 
-    public static RBT<String, Integer> generateType01() {
-        RBT<String, Integer> st = new RBT<String, Integer>();
+    /***
+     * Gera uma BinarySearchTree com determinada ordem de inserção.
+     *
+     * @return BST com 6 chaves.
+     */
+    public static BST<String, Integer> generateType01() {
+        BST<String, Integer> st = new BST<String, Integer>();
         st.put("b", 2);
         st.put("a", 1);
         st.put("c", 3);
@@ -551,8 +550,13 @@ public class RBT<Key extends Comparable<Key>, Value> {
         return st;
     }
 
-    public static RBT<String, Integer> generateType02() {
-        RBT<String, Integer> st = new RBT<String, Integer>();
+    /***
+     * Gera uma BinarySearchTree com determinada ordem de inserção.
+     *
+     * @return BST com 6 chaves.
+     */
+    public static BST<String, Integer> generateType02() {
+        BST<String, Integer> st = new BST<String, Integer>();
         st.put("a", 1);
         st.put("f", 3);
         st.put("c", 3);
@@ -562,90 +566,64 @@ public class RBT<Key extends Comparable<Key>, Value> {
         return st;
     }
 
+    /***
+     * Rotaciona uma subarvore para a esquerda.
+     *
+     * @param node Nó que será rotacionado à esquerda.
+     * @return Novo root da subarvore.
+     */
     private Node rotateLeft(Node node) {
         Node rightNode = node.right;
+        int rightRightSize = size(rightNode.right);
+        int rightLeftSize = size(rightNode.left);
+        int leftSize = size(node.left);
+        node.size = leftSize + rightLeftSize + 1;
+        rightNode.size = node.size + rightRightSize + 1;
         node.right = rightNode.left;
         rightNode.left = node;
-        // TODO Manter tamanho
-//        int rightRightSize = size(rightNode.right);
-//        int rightLeftSize = size(rightNode.left);
-//        int leftSize = size(node.left);
-//        node.size = leftSize + rightLeftSize;
-//        rightNode.size = node.size + rightRightSize + 1;
-        Color rightColor = rightNode.color;
-        rightNode.color = node.color;
-        node.color = rightColor;
         return rightNode;
     }
 
+    /***
+     * Rotaciona uma subarvore para a direita.
+     *
+     * @param node Nó que será rotacionado à direita.
+     * @return Novo root da subarvore.
+     */
     private Node rotateRight(Node node) {
         Node leftNode = node.left;
+        int leftRightSize = size(leftNode.right);
+        int leftLeftSize = size(leftNode.left);
+        int rightSize = size(node.right);
+        node.size = rightSize + leftRightSize + 1;
+        leftNode.size = node.size + leftLeftSize + 1;
         node.left = leftNode.right;
         leftNode.right = node;
-        Color leftColor = leftNode.color;
-        // TODO Manter tamanho
-//        int leftRightSize = size(leftNode.right);
-//        int leftLeftSize = size(leftNode.left);
-//        int rightSize = size(node.right);
-//        node.size = rightSize + leftRightSize;
-//        leftNode.size = node.size + leftLeftSize + 1;
-        leftNode.color = node.color;
-        node.color = leftColor;
         return leftNode;
     }
 
-    private void flip(Node node) {
-        node.right.color = otherColor(node.right.color);
-        node.left.color = otherColor(node.left.color);
-        node.color = otherColor(node.color);
-    }
-
-    private Color otherColor(Color color) {
-        return color == Color.RED ? Color.BLACK : Color.RED;
-    }
-
-    public void put(Key key, Value val) {
-        if (key == null) throw new IllegalArgumentException("calls put() with a null key");
-        // TODO Implementar método delete()
-//        if (val == null) {
-//            delete(key);
-//            return;
-//        }
-        root = put(root, key, val);
-        root.color = Color.BLACK;
-    }
-
-    private Node put(Node x, Key key, Value val) {
-        if (x == null) return new Node(key, val, 1);
-        int cmp = key.compareTo(x.key);
-        if (cmp < 0) x.left  = put(x.left,  key, val);
-        else if (cmp > 0) x.right = put(x.right, key, val);
-        else x.val   = val;
-        if ((x.right != null) && (x.right.color == Color.RED && x.left == null) ||
-                (x.right != null) && (x.right.color == Color.RED && x.left.color == Color.BLACK)) {
-            x = rotateLeft(x);
-        }
-        if (x.left != null && x.left.color == Color.RED && x.left.left != null && x.left.left.color == Color.RED) {
-            x = rotateRight(x);
-        }
-        if (x.left != null && x.left.color == Color.RED && x.right != null && x.right.color == Color.RED)
-            flip(x);
-        // TODO Atualizar tamanho.
-//        x.size = 1 + size(x.left) + size(x.right);
-
-        return x;
-    }
-
-    public void delete() {
-        // TODO
-    }
-
-    public boolean hasSameKeys(RBT<Key, Value> bst) {
-        // TODO Checar tamanho das árvores.
-//        if (size() != bst.size()) throw new IllegalArgumentException("Trees not have same size.");
+    /***
+     * Verifica se uma BST possui as mesmas chaves que outra.
+     *
+     * @param bst árvore que será comparada.
+     * @return {@code true} se possuem as mesmas chaves, se não, {@code false}.
+     * @throws IllegalArgumentException caso as árvores não possuam o mesmo tamanho.
+     */
+    public boolean hasSameKeys(BST<Key, Value> bst) {
+        if (size() != bst.size()) throw new IllegalArgumentException("Trees not have same size.");
         return hasSameKeys(bst.root);
     }
 
+    /***
+     * O algoritmo irá procurar cada chave de uma árvore, usando o método {@code contains()}, na árvore atual.
+     * Possui complexidade 0(n²).
+     * Seria possivel produzir um algoritmo O(n) armazenando as chaves da árvore modelo em um array e comparando
+     * cada chave da árvore com as chaves do array. Entretanto seria necessário mais recurso computacional para
+     * armazenar um array com tamanho {@code n}, por tal motivo optamos por não utilizar esta obordagem.
+     *
+     * @param node Nó atual da recursão.
+     * @return Se não encontrou uma chave retorna {@code false}, caso contrário, {@code true}.
+     */
     private boolean hasSameKeys(Node node) {
         if (node == null) return true;
         if (!contains(node.key)) return false;
@@ -653,24 +631,47 @@ public class RBT<Key extends Comparable<Key>, Value> {
         return hasSameKeys(node.right);
     }
 
-    public void transform(RBT<Key, Value> bst) {
-        if (!hasSameKeys(bst)) throw new IllegalArgumentException("Tree not have same keys.");
+    /***
+     * Transforma uma árvore em outra rotacionando cada nó.
+     *
+     * @param bst Árvore modelo.
+     * @throws IllegalArgumentException Caso as árvores não possuam as mesmas chaves.
+     */
+    public void transform(BST<Key, Value> bst) {
+        if (!hasSameKeys(bst)) throw new IllegalArgumentException("Trees not have same keys.");
         i=0;
         this.root = transform(root, bst);
         i=0;
     }
 
-    private Node transform(Node node, RBT<Key, Value> bst) {
+    /***
+     * O algoritmo irá percorrer a árvore trocando o {@code root} de cada subarvore por um nó com a mesma chave presente
+     * na subarvore da árvore modelo.
+     * Complexidade O(n²).
+     * Assim como o método {@code hasSameKeys()} aqui também seria possivel ter complexidade O(n) armazenando os nós da
+     * árvore modelo em um array ao invés de usar o método {@code getByIndex()}.
+     *
+     * @param node Nó atual da recursão.
+     * @param bst Árvore modelo.
+     * @return Novo {@code root} de uma subarvore.
+     */
+    private Node transform(Node node, BST<Key, Value> bst) {
         if (node == null) return null;
         Node r = getByIndex(bst.root, i);
         i++;
         node = rotateRoot(node, r);
         node.left = transform(node.left, bst);
         node.right = transform(node.right, bst);
-        node.color = r.color;
         return node;
     }
 
+    /***
+     * Retorna um nó dado sua posição pré fixada.
+     *
+     * @param node Nó raiz de uma subarvore.
+     * @param index Posição pré fixada na subarvore.
+     * @return Nó correspondente àquela posição.
+     */
     public Node getByIndex(Node node, int index) {
         int tmp = i;
         i=0;
@@ -679,7 +680,15 @@ public class RBT<Key extends Comparable<Key>, Value> {
         return res;
     }
 
-    public Node findByIndex(Node node, int index) {
+    /***
+     * O algoritmo utilizará uma variável global auxiliar {@code i} como contador para acumular cada chamada recursiva.
+     * Uma vez que {@code i} for igual à {@code index} será retornado o nó atual da recursão.
+     *
+     * @param node Nó atual da recursão.
+     * @param index Posição pré fixada.
+     * @return Nó correspondente.
+     */
+    private Node findByIndex(Node node, int index) {
         if (node == null) return null;
         if (index == i) return node;
         i++;
@@ -687,6 +696,17 @@ public class RBT<Key extends Comparable<Key>, Value> {
         return res != null ? res : findByIndex(node.right, index);
     }
 
+    /***
+     * Altera o nó root de uma subarvore para outro nó com determinada chave. Caso a chave não exista a subarvore não será alterada.
+     * Complexidade O(log(n)).
+     * O algoritmo irã percorrer a subarvore até encontrar um nó que possua a mesma chave do {@code newRoot}.
+     * Uma vez encontrado tal nó será feito uma rotação do nó pai, trazendo o nó desejado para cima até que chegue
+     * ao topo.
+     *
+     * @param root Nó atual da recursão.
+     * @param newRoot Nó com a chave que deverá ir para o topo da subarvore.
+     * @return Novo {@code root} da subarvore.
+     */
     private Node rotateRoot(Node root, Node newRoot) {
         if (root == null) return null;
         if (root.key.compareTo(newRoot.key) == 0) return root;
@@ -699,15 +719,22 @@ public class RBT<Key extends Comparable<Key>, Value> {
     }
 
     public static void main(String[] args) {
-        RBT<String, Integer> st = RBT.generateType02();
-        RBT<String, Integer> st2 = RBT.generateType01();
+        BST<String, Integer> st = BST.generateType02();
+        BST<String, Integer> st2 = BST.generateType01();
+
+        System.out.print("TIPO 1: ");
         st.printPreFixed();
+        System.out.print("TIPO 2: ");
         st2.printPreFixed();
         st.transform(st2);
+        System.out.print("TIPO 1: ");
         st.printPreFixed();
-        st.printOrder();
+//        st.printOrder();
     }
 
+    /***
+     * Mostra as chaves da árvore em ordem pré fixada.
+     */
     public void printPreFixed() {
         printPreFixed(root);
         log.println();
@@ -720,6 +747,9 @@ public class RBT<Key extends Comparable<Key>, Value> {
         printPreFixed(node.right);
     }
 
+    /***
+     * Mostra as chaves de uma árvore em ordem.
+     */
     public void printOrder() {
         printOrder(root);
         log.println();
