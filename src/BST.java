@@ -3,44 +3,41 @@ import java.io.PrintStream;
 import java.util.NoSuchElementException;
 
 /**
- *  The {@code BST} class represents an ordered symbol table of generic
- *  key-value pairs.
- *  It supports the usual <em>put</em>, <em>get</em>, <em>contains</em>,
- *  <em>delete</em>, <em>size</em>, and <em>is-empty</em> methods.
- *  It also provides ordered methods for finding the <em>minimum</em>,
- *  <em>maximum</em>, <em>floor</em>, <em>select</em>, <em>ceiling</em>.
- *  It also provides a <em>keys</em> method for iterating over all of the keys.
- *  A symbol table implements the <em>associative array</em> abstraction:
- *  when associating a value with a key that is already in the symbol table,
- *  the convention is to replace the old value with the new value.
- *  Unlike {@link java.util.Map}, this class uses the convention that
- *  values cannot be {@code null}—setting the
- *  value associated with a key to {@code null} is equivalent to deleting the key
- *  from the symbol table.
- *  <p>
- *  It requires that
- *  the key type implements the {@code Comparable} interface and calls the
- *  {@code compareTo()} and method to compare two keys. It does not call either
- *  {@code equals()} or {@code hashCode()}.
- *  <p>
- *  This implementation uses an (unbalanced) <em>binary search tree</em>.
- *  The <em>put</em>, <em>contains</em>, <em>remove</em>, <em>minimum</em>,
- *  <em>maximum</em>, <em>ceiling</em>, <em>floor</em>, <em>select</em>, and
- *  <em>rank</em>  operations each take &Theta;(<em>n</em>) time in the worst
- *  case, where <em>n</em> is the number of key-value pairs.
- *  The <em>size</em> and <em>is-empty</em> operations take &Theta;(1) time.
- *  The keys method takes &Theta;(<em>n</em>) time in the worst case.
- *  Construction takes &Theta;(1) time.
- *  <p>
- *  For alternative implementations of the symbol table API, see {@link ST},
- *  {@link BinarySearchST}, {@link SequentialSearchST}, {@link RedBlackBST},
- *  {@link SeparateChainingHashST}, and {@link LinearProbingHashST},
- *  For additional documentation, see
- *  <a href="https://algs4.cs.princeton.edu/32bst">Section 3.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ * The {@code BST} class represents an ordered symbol table of generic
+ * key-value pairs.
+ * It supports the usual <em>put</em>, <em>get</em>, <em>contains</em>,
+ * <em>delete</em>, <em>size</em>, and <em>is-empty</em> methods.
+ * It also provides ordered methods for finding the <em>minimum</em>,
+ * <em>maximum</em>, <em>floor</em>, <em>select</em>, <em>ceiling</em>.
+ * It also provides a <em>keys</em> method for iterating over all of the keys.
+ * A symbol table implements the <em>associative array</em> abstraction:
+ * when associating a value with a key that is already in the symbol table,
+ * the convention is to replace the old value with the new value.
+ * Unlike {@link java.util.Map}, this class uses the convention that
+ * values cannot be {@code null}—setting the
+ * value associated with a key to {@code null} is equivalent to deleting the key
+ * from the symbol table.
+ * <p>
+ * It requires that
+ * the key type implements the {@code Comparable} interface and calls the
+ * {@code compareTo()} and method to compare two keys. It does not call either
+ * {@code equals()} or {@code hashCode()}.
+ * <p>
+ * This implementation uses an (unbalanced) <em>binary search tree</em>.
+ * The <em>put</em>, <em>contains</em>, <em>remove</em>, <em>minimum</em>,
+ * <em>maximum</em>, <em>ceiling</em>, <em>floor</em>, <em>select</em>, and
+ * <em>rank</em>  operations each take &Theta;(<em>n</em>) time in the worst
+ * case, where <em>n</em> is the number of key-value pairs.
+ * The <em>size</em> and <em>is-empty</em> operations take &Theta;(1) time.
+ * The keys method takes &Theta;(<em>n</em>) time in the worst case.
+ * Construction takes &Theta;(1) time.
+ * <p>
+ * For additional documentation, see
+ * <a href="https://algs4.cs.princeton.edu/32bst">Section 3.2</a> of
+ * <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
+ * @author Robert Sedgewick
+ * @author Kevin Wayne
  */
 public class BST<Key extends Comparable<Key>, Value> {
     private Node root;             // root of BST
@@ -68,6 +65,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     /**
      * Returns true if this symbol table is empty.
+     *
      * @return {@code true} if this symbol table is empty; {@code false} otherwise
      */
     public boolean isEmpty() {
@@ -76,6 +74,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     /**
      * Returns the number of key-value pairs in this symbol table.
+     *
      * @return the number of key-value pairs in this symbol table
      */
     public int size() {
@@ -91,9 +90,9 @@ public class BST<Key extends Comparable<Key>, Value> {
     /**
      * Does this symbol table contain the given key?
      *
-     * @param  key the key
+     * @param key the key
      * @return {@code true} if this symbol table contains {@code key} and
-     *         {@code false} otherwise
+     * {@code false} otherwise
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
     public boolean contains(Key key) {
@@ -104,9 +103,9 @@ public class BST<Key extends Comparable<Key>, Value> {
     /**
      * Returns the value associated with the given key.
      *
-     * @param  key the key
+     * @param key the key
      * @return the value associated with the given key if the key is in the symbol table
-     *         and {@code null} if the key is not in the symbol table
+     * and {@code null} if the key is not in the symbol table
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
     public Value get(Key key) {
@@ -117,9 +116,9 @@ public class BST<Key extends Comparable<Key>, Value> {
         if (key == null) throw new IllegalArgumentException("calls get() with a null key");
         if (x == null) return null;
         int cmp = key.compareTo(x.key);
-        if      (cmp < 0) return get(x.left, key);
+        if (cmp < 0) return get(x.left, key);
         else if (cmp > 0) return get(x.right, key);
-        else              return x.val;
+        else return x.val;
     }
 
     /**
@@ -128,8 +127,8 @@ public class BST<Key extends Comparable<Key>, Value> {
      * Deletes the specified key (and its associated value) from this symbol table
      * if the specified value is {@code null}.
      *
-     * @param  key the key
-     * @param  val the value
+     * @param key the key
+     * @param val the value
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
     public void put(Key key, Value val) {
@@ -139,15 +138,15 @@ public class BST<Key extends Comparable<Key>, Value> {
             return;
         }
         root = put(root, key, val);
-//        assert check();
+        assert check();
     }
 
     private Node put(Node x, Key key, Value val) {
         if (x == null) return new Node(key, val, 1);
         int cmp = key.compareTo(x.key);
-        if      (cmp < 0) x.left  = put(x.left,  key, val);
+        if (cmp < 0) x.left = put(x.left, key, val);
         else if (cmp > 0) x.right = put(x.right, key, val);
-        else              x.val   = val;
+        else x.val = val;
         x.size = 1 + size(x.left) + size(x.right);
         return x;
     }
@@ -161,7 +160,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     public void deleteMin() {
         if (isEmpty()) throw new NoSuchElementException("Symbol table underflow");
         root = deleteMin(root);
-//        assert check();
+        assert check();
     }
 
     private Node deleteMin(Node x) {
@@ -179,7 +178,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     public void deleteMax() {
         if (isEmpty()) throw new NoSuchElementException("Symbol table underflow");
         root = deleteMax(root);
-//        assert check();
+        assert check();
     }
 
     private Node deleteMax(Node x) {
@@ -193,24 +192,24 @@ public class BST<Key extends Comparable<Key>, Value> {
      * Removes the specified key and its associated value from this symbol table
      * (if the key is in this symbol table).
      *
-     * @param  key the key
+     * @param key the key
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
     public void delete(Key key) {
         if (key == null) throw new IllegalArgumentException("calls delete() with a null key");
         root = delete(root, key);
-//        assert check();
+        assert check();
     }
 
     private Node delete(Node x, Key key) {
         if (x == null) return null;
 
         int cmp = key.compareTo(x.key);
-        if      (cmp < 0) x.left  = delete(x.left,  key);
+        if (cmp < 0) x.left = delete(x.left, key);
         else if (cmp > 0) x.right = delete(x.right, key);
         else {
             if (x.right == null) return x.left;
-            if (x.left  == null) return x.right;
+            if (x.left == null) return x.right;
             Node t = x;
             x = min(t.right);
             x.right = deleteMin(t.right);
@@ -234,7 +233,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     private Node min(Node x) {
         if (x.left == null) return x;
-        else                return min(x.left);
+        else return min(x.left);
     }
 
     /**
@@ -250,15 +249,15 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     private Node max(Node x) {
         if (x.right == null) return x;
-        else                 return max(x.right);
+        else return max(x.right);
     }
 
     /**
      * Returns the largest key in the symbol table less than or equal to {@code key}.
      *
-     * @param  key the key
+     * @param key the key
      * @return the largest key in the symbol table less than or equal to {@code key}
-     * @throws NoSuchElementException if there is no such key
+     * @throws NoSuchElementException   if there is no such key
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
     public Key floor(Key key) {
@@ -273,7 +272,7 @@ public class BST<Key extends Comparable<Key>, Value> {
         if (x == null) return null;
         int cmp = key.compareTo(x.key);
         if (cmp == 0) return x;
-        if (cmp <  0) return floor(x.left, key);
+        if (cmp < 0) return floor(x.left, key);
         Node t = floor(x.right, key);
         if (t != null) return t;
         else return x;
@@ -289,17 +288,17 @@ public class BST<Key extends Comparable<Key>, Value> {
     private Key floor2(Node x, Key key, Key best) {
         if (x == null) return best;
         int cmp = key.compareTo(x.key);
-        if      (cmp  < 0) return floor2(x.left, key, best);
-        else if (cmp  > 0) return floor2(x.right, key, x.key);
-        else               return x.key;
+        if (cmp < 0) return floor2(x.left, key, best);
+        else if (cmp > 0) return floor2(x.right, key, x.key);
+        else return x.key;
     }
 
     /**
      * Returns the smallest key in the symbol table greater than or equal to {@code key}.
      *
-     * @param  key the key
+     * @param key the key
      * @return the smallest key in the symbol table greater than or equal to {@code key}
-     * @throws NoSuchElementException if there is no such key
+     * @throws NoSuchElementException   if there is no such key
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
     public Key ceiling(Key key) {
@@ -328,10 +327,10 @@ public class BST<Key extends Comparable<Key>, Value> {
      * the symbol table that are smaller. In other words, this key is the
      * ({@code rank}+1)st smallest key in the symbol table.
      *
-     * @param  rank the order statistic
+     * @param rank the order statistic
      * @return the key in the symbol table of given {@code rank}
      * @throws IllegalArgumentException unless {@code rank} is between 0 and
-     *        <em>n</em>–1
+     *                                  <em>n</em>–1
      */
     public Key select(int rank) {
         if (rank < 0 || rank >= size()) {
@@ -345,15 +344,15 @@ public class BST<Key extends Comparable<Key>, Value> {
     private Key select(Node x, int rank) {
         if (x == null) return null;
         int leftSize = size(x.left);
-        if      (leftSize > rank) return select(x.left,  rank);
+        if (leftSize > rank) return select(x.left, rank);
         else if (leftSize < rank) return select(x.right, rank - leftSize - 1);
-        else                      return x.key;
+        else return x.key;
     }
 
     /**
      * Return the number of keys in the symbol table strictly less than {@code key}.
      *
-     * @param  key the key
+     * @param key the key
      * @return the number of keys in the symbol table strictly less than {@code key}
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
@@ -366,9 +365,9 @@ public class BST<Key extends Comparable<Key>, Value> {
     private int rank(Key key, Node x) {
         if (x == null) return 0;
         int cmp = key.compareTo(x.key);
-        if      (cmp < 0) return rank(key, x.left);
+        if (cmp < 0) return rank(key, x.left);
         else if (cmp > 0) return 1 + size(x.left) + rank(key, x.right);
-        else              return size(x.left);
+        else return size(x.left);
     }
 
     /**
@@ -415,12 +414,12 @@ public class BST<Key extends Comparable<Key>, Value> {
     /**
      * Returns the number of keys in the symbol table in the given range.
      *
-     * @param  lo minimum endpoint
-     * @param  hi maximum endpoint
+     * @param lo minimum endpoint
+     * @param hi maximum endpoint
      * @return the number of keys in the symbol table between {@code lo}
-     *         (inclusive) and {@code hi} (inclusive)
+     * (inclusive) and {@code hi} (inclusive)
      * @throws IllegalArgumentException if either {@code lo} or {@code hi}
-     *         is {@code null}
+     *                                  is {@code null}
      */
     public int size(Key lo, Key hi) {
         if (lo == null) throw new IllegalArgumentException("first argument to size() is null");
@@ -428,7 +427,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
         if (lo.compareTo(hi) > 0) return 0;
         if (contains(hi)) return rank(hi) - rank(lo) + 1;
-        else              return rank(hi) - rank(lo);
+        else return rank(hi) - rank(lo);
     }
 
     /**
@@ -439,6 +438,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     public int height() {
         return height(root);
     }
+
     private int height(Node x) {
         if (x == null) return -1;
         return 1 + Math.max(height(x.left), height(x.right));
@@ -466,12 +466,12 @@ public class BST<Key extends Comparable<Key>, Value> {
     /*************************************************************************
      *  Check integrity of BST data structure.
      ***************************************************************************/
-//    private boolean check() {
-//        if (!isBST())            StdOut.println("Not in symmetric order");
-//        if (!isSizeConsistent()) StdOut.println("Subtree counts not consistent");
+    private boolean check() {
+        if (!isBST()) System.out.println("Not in symmetric order");
+        if (!isSizeConsistent()) System.out.println("Subtree counts not consistent");
 //        if (!isRankConsistent()) StdOut.println("Ranks not consistent");
-//        return isBST() && isSizeConsistent() && isRankConsistent();
-//    }
+        return isBST() && isSizeConsistent();
+    }
 
     // does this binary tree satisfy symmetric order?
     // Note: this test also ensures that data structure is a binary tree since order is strict
@@ -569,6 +569,11 @@ public class BST<Key extends Comparable<Key>, Value> {
     /***
      * Rotaciona uma subarvore para a esquerda.
      *
+     * Método de rotação consiste em a direita do nó passado no argumento passar a apontar para o filho esquerdo
+     * do nó direito e então esse antigo nó direito apontar para o nó passdo no argumento, então esse
+     * antigo nó direito passará a ser a raíz dessa sub-árvore. O método também, atualiza os valores do atributo
+     * size, uma vez que o método de rotate irá moodificar tal valor.
+     *
      * @param node Nó que será rotacionado à esquerda.
      * @return Novo root da subarvore.
      */
@@ -586,6 +591,11 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     /***
      * Rotaciona uma subarvore para a direita.
+     *
+     * Método de rotação consiste em a esquerda do nó passado no argumento passar a apontar para o filho direito
+     * do nó esquerdo e então esse antigo nó esquerdo apontar para o nó passado no argumento, então esse antigo
+     * nó esquerdo passará a ser a raíz dessa sub-árvore. O método também, atualiza os valores do atributo size,
+     * uma vez que o método de rotate irá moodificar tal valor.
      *
      * @param node Nó que será rotacionado à direita.
      * @return Novo root da subarvore.
@@ -617,9 +627,6 @@ public class BST<Key extends Comparable<Key>, Value> {
     /***
      * O algoritmo irá procurar cada chave de uma árvore, usando o método {@code contains()}, na árvore atual.
      * Possui complexidade 0(n²).
-     * Seria possivel produzir um algoritmo O(n) armazenando as chaves da árvore modelo em um array e comparando
-     * cada chave da árvore com as chaves do array. Entretanto seria necessário mais recurso computacional para
-     * armazenar um array com tamanho {@code n}, por tal motivo optamos por não utilizar esta obordagem.
      *
      * @param node Nó atual da recursão.
      * @return Se não encontrou uma chave retorna {@code false}, caso contrário, {@code true}.
@@ -639,17 +646,15 @@ public class BST<Key extends Comparable<Key>, Value> {
      */
     public void transform(BST<Key, Value> bst) {
         if (!hasSameKeys(bst)) throw new IllegalArgumentException("Trees not have same keys.");
-        i=0;
+        i = 0;
         this.root = transform(root, bst);
-        i=0;
+        i = 0;
     }
 
     /***
      * O algoritmo irá percorrer a árvore trocando o {@code root} de cada subarvore por um nó com a mesma chave presente
      * na subarvore da árvore modelo.
      * Complexidade O(n²).
-     * Assim como o método {@code hasSameKeys()} aqui também seria possivel ter complexidade O(n) armazenando os nós da
-     * árvore modelo em um array ao invés de usar o método {@code getByIndex()}.
      *
      * @param node Nó atual da recursão.
      * @param bst Árvore modelo.
@@ -674,9 +679,9 @@ public class BST<Key extends Comparable<Key>, Value> {
      */
     public Node getByIndex(Node node, int index) {
         int tmp = i;
-        i=0;
+        i = 0;
         Node res = findByIndex(node, index);
-        i=tmp;
+        i = tmp;
         return res;
     }
 
@@ -724,16 +729,19 @@ public class BST<Key extends Comparable<Key>, Value> {
 
         System.out.print("TIPO 1: ");
         st.printPreFixed();
-        System.out.print("TIPO 2: ");
+        System.out.print("TIPO 2 : ");
         st2.printPreFixed();
-        st.transform(st2);
-        System.out.print("TIPO 1: ");
-        st.printPreFixed();
-//        st.printOrder();
+
+        if (st.isSizeConsistent()) {
+            System.out.println("True");
+        } else {
+            System.out.println("False");
+        }
     }
 
     /***
-     * Mostra as chaves da árvore em ordem pré fixada.
+     * Percorre a árvore na ordem Raiz-Esquerda-Direita printando cada chave encontrada.
+     * Complexidade O(n) uma vez que necessariamente irá percorrer toda a árvore.
      */
     public void printPreFixed() {
         printPreFixed(root);
@@ -748,7 +756,8 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
 
     /***
-     * Mostra as chaves de uma árvore em ordem.
+     * Percorre a árvore na ordem Esquerda-Raiz-Direita printando cada chave encontrada.
+     * Complexidade O(n) uma vez que necessariamente irá percorrer toda a árvore
      */
     public void printOrder() {
         printOrder(root);
@@ -760,6 +769,49 @@ public class BST<Key extends Comparable<Key>, Value> {
         printOrder(node.left);
         log.print(node.key);
         printOrder(node.right);
+    }
+
+    private boolean isBST() {
+        return isBST(root);
+    }
+
+    private boolean isBST(Node node) {
+        if (node == null) return true;
+        if (!isBST(node.left)) return false;
+        if (!isBST(node.right)) return false;
+        if (this.root.key.compareTo(this.root.left.key) < 0) {
+            return false;
+        }
+        if (this.root.key.compareTo(this.root.right.key) > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isSizeConsistent() {
+        return isSizeConsistent(root);
+    }
+
+    private boolean isSizeConsistent(Node node) {
+        int sizeComp = 0;
+        if (node == null){
+            return true;
+        }
+        else if (!isSizeConsistent(node.left)) return false;
+        else if (!isSizeConsistent(node.right)) return false;
+        sizeComp = 1 + noCount(node.left) + noCount(node.right);
+        System.out.println("sizeComp:"+sizeComp+" "+"size:"+node.size);
+        if(sizeComp != node.size) return false;
+        return true;
+    }
+
+    private int noCount(Node node){
+        if(node == null){
+            return 0;
+        }
+        else{
+            return 1+noCount(node.left) + noCount(node.right);
+        }
     }
 }
 
