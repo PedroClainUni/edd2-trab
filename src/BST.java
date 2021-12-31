@@ -1,6 +1,8 @@
 
 import java.io.PrintStream;
+import java.util.ArrayDeque;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 
 /**
  * The {@code BST} class represents an ordered symbol table of generic
@@ -377,10 +379,10 @@ public class BST<Key extends Comparable<Key>, Value> {
      *
      * @return all keys in the symbol table
      */
-//    public Iterable<Key> keys() {
-//        if (isEmpty()) return new Queue<Key>();
-//        return keys(min(), max());
-//    }
+    public Iterable<Key> keys() {
+        if (isEmpty()) return new ArrayDeque<>();
+        return keys(min(), max());
+    }
 
     /**
      * Returns all keys in the symbol table in the given range,
@@ -393,23 +395,23 @@ public class BST<Key extends Comparable<Key>, Value> {
      * @throws IllegalArgumentException if either {@code lo} or {@code hi}
      *         is {@code null}
      */
-//    public Iterable<Key> keys(Key lo, Key hi) {
-//        if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
-//        if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
-//
-//        Queue<Key> queue = new Queue<Key>();
-//        keys(root, queue, lo, hi);
-//        return queue;
-//    }
+    public Iterable<Key> keys(Key lo, Key hi) {
+        if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
+        if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
 
-//    private void keys(Node x, Queue<Key> queue, Key lo, Key hi) {
-//        if (x == null) return;
-//        int cmplo = lo.compareTo(x.key);
-//        int cmphi = hi.compareTo(x.key);
-//        if (cmplo < 0) keys(x.left, queue, lo, hi);
-//        if (cmplo <= 0 && cmphi >= 0) queue.enqueue(x.key);
-//        if (cmphi > 0) keys(x.right, queue, lo, hi);
-//    }
+        Queue<Key> queue = new ArrayDeque<>();
+        keys(root, queue, lo, hi);
+        return queue;
+    }
+
+    private void keys(Node x, Queue<Key> queue, Key lo, Key hi) {
+        if (x == null) return;
+        int cmplo = lo.compareTo(x.key);
+        int cmphi = hi.compareTo(x.key);
+        if (cmplo < 0) keys(x.left, queue, lo, hi);
+        if (cmplo <= 0 && cmphi >= 0) queue.add(x.key);
+        if (cmphi > 0) keys(x.right, queue, lo, hi);
+    }
 
     /**
      * Returns the number of keys in the symbol table in the given range.
@@ -449,19 +451,19 @@ public class BST<Key extends Comparable<Key>, Value> {
      *
      * @return the keys in the BST in level order traversal
      */
-//    public Iterable<Key> levelOrder() {
-//        Queue<Key> keys = new Queue<Key>();
-//        Queue<Node> queue = new Queue<Node>();
-//        queue.enqueue(root);
-//        while (!queue.isEmpty()) {
-//            Node x = queue.dequeue();
-//            if (x == null) continue;
-//            keys.enqueue(x.key);
-//            queue.enqueue(x.left);
-//            queue.enqueue(x.right);
-//        }
-//        return keys;
-//    }
+    public Iterable<Key> levelOrder() {
+        Queue<Key> keys = new ArrayDeque<>();
+        Queue<Node> queue = new ArrayDeque<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            Node x = queue.peek();
+            if (x == null) continue;
+            keys.add(x.key);
+            queue.add(x.left);
+            queue.add(x.right);
+        }
+        return keys;
+    }
 
     /*************************************************************************
      *  Check integrity of BST data structure.
@@ -469,8 +471,8 @@ public class BST<Key extends Comparable<Key>, Value> {
     private boolean check() {
         if (!isBST()) System.out.println("Not in symmetric order");
         if (!isSizeConsistent()) System.out.println("Subtree counts not consistent");
-        //if (!isRankConsistent()) System.out.println("Ranks not consistent");
-        return isBST() && isSizeConsistent(); //&& isRankConsistent();
+        if (!isRankConsistent()) System.out.println("Ranks not consistent");
+        return isBST() && isSizeConsistent() && isRankConsistent();
     }
 
    private boolean isBST() {
@@ -494,13 +496,13 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
 
 
-    //private boolean isRankConsistent() {
-     //   for (int i = 0; i < size(); i++)
-     //       if (i != rank(select(i))) return false;
-       // for (Key key : keys())
-         //   if (key.compareTo(select(rank(key))) != 0) return false;
-        //return true;
-    //}
+    private boolean isRankConsistent() {
+        for (int i = 0; i < size(); i++)
+            if (i != rank(select(i))) return false;
+        for (Key key : keys())
+            if (key.compareTo(select(rank(key))) != 0) return false;
+        return true;
+    }
 
 
     /**
@@ -611,7 +613,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     /***
      * Verifica se uma BST possui as mesmas chaves que outra.
      *
-     * @param bst árvore que será comparada.
+     * @param bst árvore que será comparada com a árvore atual.
      * @return {@code true} se possuem as mesmas chaves, se não, {@code false}.
      * @throws IllegalArgumentException caso as árvores não possuam o mesmo tamanho.
      */
@@ -621,8 +623,8 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
 
     /***
-     * O algoritmo irá procurar cada chave de uma árvore, usando o método {@code contains()}, na árvore atual.
-     * Possui complexidade 0(n²).
+     * O algoritmo irá procurar cada chave da árvore modelo, usando o método {@code contains()}, na árvore atual.
+     * Complexidade 0(n²).
      *
      * @param node Nó atual da recursão.
      * @return Se não encontrou uma chave retorna {@code false}, caso contrário, {@code true}.
@@ -630,12 +632,11 @@ public class BST<Key extends Comparable<Key>, Value> {
     private boolean hasSameKeys(Node node) {
         if (node == null) return true;
         if (!contains(node.key)) return false;
-        if (!hasSameKeys(node.left)) return false;
-        return hasSameKeys(node.right);
+        return hasSameKeys(node.right) && hasSameKeys(node.left);
     }
 
     /***
-     * Transforma uma árvore em outra rotacionando cada nó.
+     * Transforma a árvore atual em outra rotacionando cada nó.
      *
      * @param bst Árvore modelo.
      * @throws IllegalArgumentException Caso as árvores não possuam as mesmas chaves.
@@ -645,12 +646,20 @@ public class BST<Key extends Comparable<Key>, Value> {
         i = 0;
         this.root = transform(root, bst);
         i = 0;
+        check();
+        bst.check();
     }
 
     /***
-     * O algoritmo irá percorrer a árvore trocando o {@code root} de cada subarvore por um nó com a mesma chave presente
-     * na subarvore da árvore modelo.
+     * O algoritmo irá percorrer a árvore. Em cada chamada recursiva ele irá buscar um nó na árvore modelo, percorrendo
+     * a mesma de forma pré fixada. O objetivo é passar por todos os nós da árvore modelo, trocando cada nó da árvore atual.
+     * Esse algoritmo funciona pois a árvore atual será reconstruida de cima para baixo sempre espelhando a árvore modelo.
      * Complexidade O(n²).
+     *
+     * Passo 1 - Busca um nó da árvore modelo na posição 0 pré fixada;
+     * Passo 2 - Incrementa {@code i} para prosseguir na árvore modelo;
+     * Passo 3 - Troca o {@code node} atual para um nó que possua a mesma chave de do nó encontrado na árvore modelo, {@code tmp};
+     * Passo 4 - Após a troca de nós, continua percorrendo a árvore atual de forma pré fixada.
      *
      * @param node Nó atual da recursão.
      * @param bst Árvore modelo.
@@ -658,9 +667,9 @@ public class BST<Key extends Comparable<Key>, Value> {
      */
     private Node transform(Node node, BST<Key, Value> bst) {
         if (node == null) return null;
-        Node r = getByIndex(bst.root, i);
+        Node tmp = getByIndex(bst.root, i);
         i++;
-        node = rotateRoot(node, r);
+        node = rotateRoot(node, tmp);
         node.left = transform(node.left, bst);
         node.right = transform(node.right, bst);
         return node;
@@ -674,6 +683,7 @@ public class BST<Key extends Comparable<Key>, Value> {
      * @return Nó correspondente àquela posição.
      */
     public Node getByIndex(Node node, int index) {
+        if (index < 0) return null;
         int tmp = i;
         i = 0;
         Node res = findByIndex(node, index);
@@ -701,8 +711,8 @@ public class BST<Key extends Comparable<Key>, Value> {
      * Altera o nó root de uma subarvore para outro nó com determinada chave. Caso a chave não exista a subarvore não será alterada.
      * Complexidade O(log(n)).
      * O algoritmo irã percorrer a subarvore até encontrar um nó que possua a mesma chave do {@code newRoot}.
-     * Uma vez encontrado tal nó será feito uma rotação do nó pai, trazendo o nó desejado para cima até que chegue
-     * ao topo.
+     * Uma vez encontrado tal nó será feito uma rotação do nó pai, trazendo o nó desejado para cima, repetindo até que chegue
+     * ao topo da subarvore.
      *
      * @param root Nó atual da recursão.
      * @param newRoot Nó com a chave que deverá ir para o topo da subarvore.
@@ -725,18 +735,11 @@ public class BST<Key extends Comparable<Key>, Value> {
 
         System.out.print("TIPO 1: ");
         st.printPreFixed();
-        System.out.print("TIPO 2 : ");
+        System.out.print("TIPO 2: ");
         st2.printPreFixed();
-        if (st.isBST()) {
-            System.out.println("True");
-        } else {
-            System.out.println("False");
-        }
-        if (st.isSizeConsistent()) {
-            System.out.println("True");
-        } else {
-            System.out.println("False");
-        }
+        st.transform(st2);
+        System.out.print("TIPO 1: ");
+        st.printPreFixed();
     }
 
     /***
