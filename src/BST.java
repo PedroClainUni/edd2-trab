@@ -727,7 +727,11 @@ public class BST<Key extends Comparable<Key>, Value> {
         st.printPreFixed();
         System.out.print("TIPO 2 : ");
         st2.printPreFixed();
-
+        if (st.isBST()) {
+            System.out.println("True");
+        } else {
+            System.out.println("False");
+        }
         if (st.isSizeConsistent()) {
             System.out.println("True");
         } else {
