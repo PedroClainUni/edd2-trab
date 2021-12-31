@@ -469,42 +469,38 @@ public class BST<Key extends Comparable<Key>, Value> {
     private boolean check() {
         if (!isBST()) System.out.println("Not in symmetric order");
         if (!isSizeConsistent()) System.out.println("Subtree counts not consistent");
-//        if (!isRankConsistent()) StdOut.println("Ranks not consistent");
-        return isBST() && isSizeConsistent();
+        //if (!isRankConsistent()) System.out.println("Ranks not consistent");
+        return isBST() && isSizeConsistent(); //&& isRankConsistent();
     }
 
-    // does this binary tree satisfy symmetric order?
-    // Note: this test also ensures that data structure is a binary tree since order is strict
-//    private boolean isBST() {
-//        return isBST(root, null, null);
-//    }
+   private boolean isBST() {
+        return isBST(root, null, null);
+    }
 
-    // is the tree rooted at x a BST with all keys strictly between min and max
-    // (if min or max is null, treat as empty constraint)
-    // Credit: Bob Dondero's elegant solution
-//    private boolean isBST(Node x, Key min, Key max) {
-//        if (x == null) return true;
-//        if (min != null && x.key.compareTo(min) <= 0) return false;
-//        if (max != null && x.key.compareTo(max) >= 0) return false;
-//        return isBST(x.left, min, x.key) && isBST(x.right, x.key, max);
-//    }
+
+    private boolean isBST(Node x, Key min, Key max) {
+        if (x == null) return true;
+        if (min != null && x.key.compareTo(min) <= 0) return false;
+        if (max != null && x.key.compareTo(max) >= 0) return false;
+        return isBST(x.left, min, x.key) && isBST(x.right, x.key, max);
+    }
 
     // are the size fields correct?
-//    private boolean isSizeConsistent() { return isSizeConsistent(root); }
-//    private boolean isSizeConsistent(Node x) {
-//        if (x == null) return true;
-//        if (x.size != size(x.left) + size(x.right) + 1) return false;
-//        return isSizeConsistent(x.left) && isSizeConsistent(x.right);
-//    }
+    private boolean isSizeConsistent() { return isSizeConsistent(root); }
+    private boolean isSizeConsistent(Node x) {
+        if (x == null) return true;
+        if (x.size != size(x.left) + size(x.right) + 1) return false;
+        return isSizeConsistent(x.left) && isSizeConsistent(x.right);
+    }
 
-    // check that ranks are consistent
-//    private boolean isRankConsistent() {
-//        for (int i = 0; i < size(); i++)
-//            if (i != rank(select(i))) return false;
-//        for (Key key : keys())
-//            if (key.compareTo(select(rank(key))) != 0) return false;
-//        return true;
-//    }
+
+    //private boolean isRankConsistent() {
+     //   for (int i = 0; i < size(); i++)
+     //       if (i != rank(select(i))) return false;
+       // for (Key key : keys())
+         //   if (key.compareTo(select(rank(key))) != 0) return false;
+        //return true;
+    //}
 
 
     /**
@@ -771,48 +767,6 @@ public class BST<Key extends Comparable<Key>, Value> {
         printOrder(node.right);
     }
 
-    private boolean isBST() {
-        return isBST(root);
-    }
-
-    private boolean isBST(Node node) {
-        if (node == null) return true;
-        if (!isBST(node.left)) return false;
-        if (!isBST(node.right)) return false;
-        if (this.root.key.compareTo(this.root.left.key) < 0) {
-            return false;
-        }
-        if (this.root.key.compareTo(this.root.right.key) > 0) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isSizeConsistent() {
-        return isSizeConsistent(root);
-    }
-
-    private boolean isSizeConsistent(Node node) {
-        int sizeComp = 0;
-        if (node == null){
-            return true;
-        }
-        else if (!isSizeConsistent(node.left)) return false;
-        else if (!isSizeConsistent(node.right)) return false;
-        sizeComp = 1 + noCount(node.left) + noCount(node.right);
-        System.out.println("sizeComp:"+sizeComp+" "+"size:"+node.size);
-        if(sizeComp != node.size) return false;
-        return true;
-    }
-
-    private int noCount(Node node){
-        if(node == null){
-            return 0;
-        }
-        else{
-            return 1+noCount(node.left) + noCount(node.right);
-        }
-    }
 }
 
 /******************************************************************************
