@@ -624,6 +624,9 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     /***
      * O algoritmo irá procurar cada chave da árvore modelo, usando o método {@code contains()}, na árvore atual.
+     * Passo 1 - O nó será a raiz da árvore modelo;
+     * Passo 2 - Busca a chave desse nó na árvore atual;
+     * Passo 3 - Caso não encontre a chave na árvore atual retorna {@code false}
      * Complexidade 0(n²).
      *
      * @param node Nó atual da recursão.
