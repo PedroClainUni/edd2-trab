@@ -504,32 +504,13 @@ public class BST<Key extends Comparable<Key>, Value> {
         return true;
     }
 
-
-    /**
-     * Unit tests the {@code BST} data type.
-     *
-     * @param args the command-line arguments
-     */
-//    public static void main(String[] args) {
-//        BST<String, Integer> st = new BST<String, Integer>();
-//        for (int i = 0; !StdIn.isEmpty(); i++) {
-//            String key = StdIn.readString();
-//            st.put(key, i);
-//        }
-//
-//        for (String s : st.levelOrder())
-//            StdOut.println(s + " " + st.get(s));
-//
-//        StdOut.println();
-//
-//        for (String s : st.keys())
-//            StdOut.println(s + " " + st.get(s));
-//    }
-
     /***
-     * ========================================================================
-     *                     NOSSO CÓDIGO
-     * ========================================================================
+     **************************************************************************
+     * Implementação dos métodos requeridos no trabalho.
+     *
+     * @autor Pedro Henrique Clain
+     * @autor Thiago Silva
+     **************************************************************************
      */
 
     /***
