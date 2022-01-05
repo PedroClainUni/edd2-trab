@@ -574,8 +574,12 @@ public class BST<Key extends Comparable<Key>, Value> {
      *
      * @param node Nó que será rotacionado à esquerda.
      * @return Novo root da subarvore.
+     * @throw IllegalArgumentException Se nó é {@code null} ou subarvore da
+     * direita do nó é {@code null}.
      */
     private Node rotateLeft(Node node) {
+        if (node == null) throw new IllegalArgumentException("Node cannot be null.");
+        if (node.right == null) throw new IllegalArgumentException("Node has no right subtree.");
         Node rightNode = node.right;
         int rightRightSize = size(rightNode.right);
         int rightLeftSize = size(rightNode.left);
@@ -597,8 +601,12 @@ public class BST<Key extends Comparable<Key>, Value> {
      *
      * @param node Nó que será rotacionado à direita.
      * @return Novo root da subarvore.
+     * @throw IllegalArgumentException Se nó é {@code null} ou subarvore da
+     * esquerda do nó é {@code null}.
      */
     private Node rotateRight(Node node) {
+        if (node == null) throw new IllegalArgumentException("Node cannot be null.");
+        if (node.left == null) throw new IllegalArgumentException("Node has no left subtree.");
         Node leftNode = node.left;
         int leftRightSize = size(leftNode.right);
         int leftLeftSize = size(leftNode.left);
@@ -735,7 +743,6 @@ public class BST<Key extends Comparable<Key>, Value> {
     public static void main(String[] args) {
         BST<String, Integer> st = BST.generateType02();
         BST<String, Integer> st2 = BST.generateType01();
-
         System.out.print("TIPO 1: ");
         st.printPreFixed();
         System.out.print("TIPO 2: ");
