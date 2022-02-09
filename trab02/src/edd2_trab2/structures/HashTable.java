@@ -26,7 +26,7 @@ public class HashTable<Key extends Comparable, Value> {
     public void put(Key key, Value value) {
         int pos = this.hash(key);
         LinkedList<Key, Value> list = this.vector.get(pos);
-        
+
         if (list == null) list = new LinkedList<>();
         
         list.add(key, value);
@@ -41,6 +41,15 @@ public class HashTable<Key extends Comparable, Value> {
         int pos = this.hash(key);
         LinkedList<Key, Value> list = this.vector.get(pos);
         return list.first();
+    }
+
+    private int hashFunction(String archieve){
+        int hashCode = archieve.hashCode();
+        if(hashCode < 0){
+            hashCode *= -1;
+        }
+        int response = hashCode % size;
+        return response;
     }
 }
 
