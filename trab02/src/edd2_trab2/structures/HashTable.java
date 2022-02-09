@@ -62,6 +62,15 @@ public class HashTable<Key extends Comparable, Value> {
     public int size() {
       return this.size;
     }
+
+    private int hashFunction(String archieve){
+        int hashCode = archieve.hashCode();
+        if(hashCode < 0){
+            hashCode *= -1;
+        }
+        int response = hashCode % size;
+        return response;
+    }
 }
 
 
