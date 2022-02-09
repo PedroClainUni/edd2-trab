@@ -1,12 +1,13 @@
 package edd2_trab2;
 
-import edd2_trab2.structures.HashTable;
+import edd2_trab2.structures.*;
+
 import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
 class MyString implements Comparable<MyString> {
-  private String content;
+ private String content;
   private static int countCompares = 0;
   public MyString( String content ){ this.content = content; }
   public static void resetCompares() { countCompares = 0; }
@@ -34,7 +35,13 @@ class Main {
   // experimental
   private static int MIN_SKIP = 4;
   private static int MAX_SKIP = 128;
+
   public static void main(String[] args) {
+      TextReader leitor = new TextReader();
+      String texto = leitor.textRead("tale.txt");
+      System.out.println(texto);
+  }
+      /*
     HashTable<MyString, Integer> data
         = new HashTable<>(233);
         // = new HashTable<>(193939);
@@ -97,5 +104,5 @@ class Main {
     catch( FileNotFoundException e ) {
       System.out.println( "Arquivo não encontrado!" );
     }
-  }
+  }*/
 }
