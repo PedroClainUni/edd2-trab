@@ -57,7 +57,9 @@ public class HashTable<Key extends Comparable, Value> {
     public LinkedList<Key> keys() {
       LinkedList<Key> keys = new LinkedList<>();
       for (CustomLinkedList list : this.vector) {
-        keys.addAll(list.keys());
+        if (list != null) {
+          keys.addAll(list.keys());
+        }        
       }
       return keys;
     }
