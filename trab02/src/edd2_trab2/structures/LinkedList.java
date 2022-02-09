@@ -45,8 +45,7 @@ public class LinkedList<Key extends Comparable, Value> {
                     return;
                 }
                 node = node.next;
-            }
-            
+            }            
             node.next = newNode;      
         }
     }
