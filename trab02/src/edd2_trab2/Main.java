@@ -20,7 +20,7 @@ class MyString implements Comparable<MyString> {
   }
 }
 class Main {
-  private static boolean DEBUG = false;
+  private static boolean DEBUG = true;
   private static boolean MEASURE = true;
   // se DEBUG && !MEASURE, o programa deve
   // gerar como resultado impresso o conteúdo

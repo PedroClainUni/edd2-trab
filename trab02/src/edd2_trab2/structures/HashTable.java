@@ -24,9 +24,12 @@ public class HashTable<Key extends Comparable, Value> {
     }
     
     private int hash(Key key) {
-        int hashcode = key.hashCode();
-        if (hashcode < 0) hashcode *= -1;
-        return hashcode % this.size;
+        int hashCode = key.hashCode();
+        if(hashCode < 0){
+            hashCode *= -1;
+        }
+        int response = hashCode % size;
+        return response;
     }
     
     public void put(Key key, Value value) {
@@ -61,15 +64,6 @@ public class HashTable<Key extends Comparable, Value> {
     
     public int size() {
       return this.size;
-    }
-
-    private int hashFunction(String archieve){
-        int hashCode = archieve.hashCode();
-        if(hashCode < 0){
-            hashCode *= -1;
-        }
-        int response = hashCode % size;
-        return response;
     }
 }
 
