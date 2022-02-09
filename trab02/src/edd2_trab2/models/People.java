@@ -11,10 +11,20 @@ import java.util.Objects;
  *
  * @author pedro
  */
-public class People implements Comparable<Object>{
+public class People implements Comparable {
   private String cpf;
   private String name;
   private String age;
+
+  public People(String cpf, String name, String age) {
+    this.cpf = cpf;
+    this.name = name;
+    this.age = age;
+  }
+  
+  public People() {
+    
+  }
 
   @Override
   public int hashCode() {
@@ -53,6 +63,30 @@ public class People implements Comparable<Object>{
     if (t instanceof People == false) throw new IllegalArgumentException("'compareTo()' argument must be People instance.");
     People p = (People) t;
     return this.cpf.compareTo(p.cpf);
+  }
+
+  public String getCpf() {
+    return cpf;
+  }
+
+  public void setCpf(String cpf) {
+    this.cpf = cpf;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getAge() {
+    return age;
+  }
+
+  public void setAge(String age) {
+    this.age = age;
   }
   
   
