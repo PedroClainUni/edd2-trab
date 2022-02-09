@@ -39,14 +39,13 @@ public class LinkedList<Key extends Comparable, Value> {
             this.first = newNode;
         } else {
             Node node = this.first;
-            do {
-                if (node.key.compareTo(key) == 0) {
-                    node.value = value;
+            while(node.next != null) {
+              if (node.next.key.compareTo(key) == 0) {
+                    node.next.value = value;
                     return;
                 }
                 node = node.next;
-            } while(node.next != null);
-            
+            }            
             node.next = newNode;      
         }
     }
@@ -68,12 +67,13 @@ public class LinkedList<Key extends Comparable, Value> {
         if (this.first.key.compareTo(key) == 0) {
             this.first = this.first.next;
         } else {
-            do {
-                if (node.next.key.compareTo(key) == 0) {
-                    node.next = node.next.next;
-                }
-                node = node.next;
-            } while(node.next != null);
+          while(node.next != null) {
+            if (node.next.key.compareTo(key) == 0) {
+                node.next = node.next.next;
+                return;
+            }
+            node = node.next;
+          }
         }           
     }
     
